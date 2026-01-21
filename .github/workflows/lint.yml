@@ -1,0 +1,45 @@
+name: CI/CD
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+      
+      - run: bun install
+      
+      - name: Lint
+        run: bun run lint
+      
+      - name: Type check
+        run: bun run type-check
+     
+
+  # deploy-frontend:
+  #   needs: lint-and-test
+  #   if: github.ref == 'refs/heads/main'
+  #   runs-on: ubuntu-latest
+  #   steps:
+    
+  #     - run: echo "Frontend deploys automatically"
+
+  # deploy-backend:
+  #   needs: lint-and-test
+  #   if: github.ref == 'refs/heads/main'
+  #   runs-on: ubuntu-latest
+  #   steps:
+     
+  #     - uses: actions/checkout@v4
+  #     - uses: superfly/flyctl-actions/setup-flyctl@master # for Fly.io
+  #     - run: flyctl deploy --remote-only
+  #       env:
+  #         FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
