@@ -21,7 +21,7 @@ interface InputProps<T extends FieldValues> extends VariantProps<typeof inputVar
 }
 
 
-const inputVariants = cva("", {
+const inputVariants = cva(``, {
   variants: {
     variant: {
       auth: "w-full border-2 p-3 border-stone-600 text-xs rounded-md",

@@ -5,16 +5,17 @@ import { useState } from "react";
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CInput } from "@/components/shared/cinput";
+import { CButton } from "@/components/shared/cbutton";
 
 const AuthPage = () => {
-    const [isLogin, useIsLogin] = useState(true);
+    const [isLogin, setIsLogin] = useState(true);
     const { handleSubmit, register, formState: { errors } } = useForm<authSchemaType>({
         resolver: zodResolver(authSchema)
     })
 
 
     const submitHandler = (data: authSchemaType) => {
-        console.log(data)
+        console.log(data, isLogin)
     }
 
     return (
@@ -33,8 +34,22 @@ const AuthPage = () => {
                         <CInput placeholder="Enter password" inputType="text" variant="auth" name="password" fieldType="password" register={register} errors={errors} />
                     </div>
 
-                    <div>
+                    <div className="mb-4">
                         {isLogin && <p className="text-xs underline hover:cursor-pointer">Forgot password?</p>}
+                    </div>
+
+                    <div className="mb-2">
+                        <CButton type="submit" label={isLogin ? "Login" : "Register"} />
+                    </div>
+
+                    <div className="mb-4 flex items-center justify-center">
+                        <button type="button" onClick={
+                            () => {
+                                setIsLogin(!isLogin)
+                            }
+                        } className="text-xs text-center hover:cursor-pointer">
+                            {isLogin ? `Don't have an account? Create one.` : "Already have an account? Login"}
+                        </button>
                     </div>
 
                 </form>
