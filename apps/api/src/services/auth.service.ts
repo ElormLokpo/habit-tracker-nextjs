@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 import { HTTPException } from "hono/http-exception"
 import { STATUS_CODES } from "../../../../packages/types/index"
 import { comparePassword, hashPassword } from "../utils/bcrypt";
-import { password } from "bun";
+import { generateToken } from "../utils/jwt";
 
 
 export const findUserByEmail = async (email: string) => await db.select().from(UserModel).where(eq(UserModel.email, email)).limit(1);
@@ -20,7 +20,14 @@ export const registerUserService = async ({ email, password }: IAuthDto) => {
     //don't forget to setup email service
 
     const finalauthData = { email, passwordHash: await hashPassword(password) as string };
-    return await db.insert(UserModel).values(finalauthData).returning();
+
+    try {
+        await db.insert(UserModel).values(finalauthData);
+    } catch (e) {
+        console.error("Trouble insertintg into database", e)
+    }
+
+    return await generateToken({ email });
 
 }
 
@@ -33,10 +40,10 @@ export const loginUserService = async ({ email, password }: IAuthDto) => {
 
     }
 
-    if (await comparePassword(foundUser[0].passwordHash, password)) {
+    if (!await comparePassword(foundUser[0].passwordHash, password)) {
         throw new HTTPException(STATUS_CODES.UNAUTHORIZED, { message: "Incorrect password." });
     }
 
-    return true;
+    return await generateToken({ email });
 
 }
