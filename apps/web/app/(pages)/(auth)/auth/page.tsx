@@ -1,11 +1,12 @@
 "use client"
 
-import { authSchema, authSchemaType } from "@/schema";
+import { authSchema, authSchemaType } from "../../../../../../packages/types";
 import { useState } from "react";
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { CInput } from "@/components/shared/cinput";
-import { CButton } from "@/components/shared/cbutton";
+import { CInput } from "@/app/components/shared/cinput";
+import { CButton } from "@/app/components/shared/cbutton";
+import { useRegister } from "@/app/hooks/authHook";
 
 const AuthPage = () => {
     const [isLogin, setIsLogin] = useState(true);
@@ -14,7 +15,17 @@ const AuthPage = () => {
     })
 
 
+    const {mutate:registerUser, isPending} = useRegister()
+
+
     const submitHandler = (data: authSchemaType) => {
+        if(isLogin){
+
+        }else{
+            console.log("this run")
+            registerUser(data);
+        }
+
         console.log(data, isLogin)
     }
 
