@@ -7,7 +7,7 @@ import { toast } from "sonner"
 
 
 const successHandler = () => {
-    toast.success("Register successful")
+    toast.success("Register successfulsss")
 }
 
 export const useRegister = () => {
