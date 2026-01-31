@@ -36,7 +36,7 @@ export const useLogin = () => {
 
     return useMutation({
         mutationFn: async (data: authSchemaType) => await axiosClient.post(BACKEND_URLS.LOGIN, data),
-        onSuccess: (data: unknown) => successHandler(dispatch, true, data),
+        onSuccess: (data: IAuthResponse) => successHandler(dispatch, true, data),
         onError: (error) => toast.error(error.message)
     })
 }
