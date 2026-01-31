@@ -1,6 +1,26 @@
-import axios from "axios"
+import axios, { AxiosError } from "axios"
 
 
 export const axiosClient = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_BACKEND_URL_DEV
+    baseURL: "http://localhost:5000"
 })
+
+
+axiosClient.interceptors.response.use(
+    (res) => res,
+    (error: AxiosError) => {
+        if (error.response) {
+            console.log(error.response)
+
+            throw {
+                status: error.response.status,
+                message: error.response.data
+            }
+        }
+
+        throw {
+            status: 500,
+            message: "Error reaching server!"
+        }
+    }
+)
