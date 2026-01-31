@@ -16,12 +16,14 @@ interface InputProps<T extends FieldValues> extends VariantProps<typeof inputVar
   name: Path<T>,
   inputType?: string,
   fieldType?: string,
-  placeholder?: string
-
+  placeholder?: string,
+  isDisabled?: boolean
+  isLoading?: boolean,
+  isError?: boolean
 }
 
 
-const inputVariants = cva(``, {
+const inputVariants = cva(`disabled:cursor-not-allowed`, {
   variants: {
     variant: {
       auth: "w-full border-2 p-3 border-stone-600 text-xs rounded-md",
@@ -43,8 +45,10 @@ export const CInput = <T extends FieldValues>({
   name,
   inputType = "text",
   fieldType = "text",
-  placeholder
-
+  placeholder,
+  isDisabled,
+  isLoading,
+  isError
 }: InputProps<T>) => {
 
   const inputTypes: Record<string, ReactElement> = {
@@ -53,9 +57,10 @@ export const CInput = <T extends FieldValues>({
       <div>
         {label && <p className="text-xs">{label}</p>}
         <input
+          disabled={isLoading || isDisabled}
           type={fieldType}
           placeholder={placeholder}
-          className={cn(inputVariants({ variant }), classname, errors?.name && "border-red-400")}
+          className={cn(inputVariants({ variant }), classname, (errors?.name || isError) && "border-red-400")}
           {...(register ? register(name) : {})}
         />
 

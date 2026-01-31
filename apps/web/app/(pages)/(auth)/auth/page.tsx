@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CInput } from "@/app/components/shared/cinput";
 import { CButton } from "@/app/components/shared/cbutton";
-import { useRegister } from "@/app/hooks/authHook";
+import { useLogin, useRegister } from "@/app/hooks/authHook";
 
 const AuthPage = () => {
     const [isLogin, setIsLogin] = useState(true);
@@ -15,13 +15,16 @@ const AuthPage = () => {
     })
 
 
-    const {mutate:registerUser, isPending} = useRegister()
+    const { mutate: registerUser, isPending, isError, error } = useRegister()
+    const { mutate: loginUser, isPending: isLoginPending, isError: isLoginError, error: loginError } = useLogin()
 
+
+    console.log('ERRROR', loginError)
 
     const submitHandler = (data: authSchemaType) => {
-        if(isLogin){
-
-        }else{
+        if (isLogin) {
+            loginUser(data)
+        } else {
             console.log("this run")
             registerUser(data);
         }
@@ -38,19 +41,24 @@ const AuthPage = () => {
                     </div>
 
                     <div className="mb-1.5">
-                        <CInput placeholder="Enter email" inputType="text" variant="auth" name="email" register={register} errors={errors} />
+                        <CInput isError={isLogin ? isLoginError : isError} isDisabled={isPending || isLoginPending} placeholder="Enter email" inputType="text" variant="auth" name="email" register={register} errors={errors} />
                     </div>
 
                     <div className="mb-2.5">
-                        <CInput placeholder="Enter password" inputType="text" variant="auth" name="password" fieldType="password" register={register} errors={errors} />
+                        <CInput isError={isLogin ? isLoginError : isError} isDisabled={isPending || isLoginPending} placeholder="Enter password" inputType="text" variant="auth" name="password" fieldType="password" register={register} errors={errors} />
                     </div>
 
                     <div className="mb-4">
                         {isLogin && <p className="text-xs underline hover:cursor-pointer">Forgot password?</p>}
                     </div>
 
+
+                    <div className="mb-4">
+                        <p className="text-xs text-red-400 hover:cursor-pointer">{isLogin ? loginError?.message : error?.message}</p>
+                    </div>
+
                     <div className="mb-2">
-                        <CButton type="submit" label={isLogin ? "Login" : "Register"} />
+                        <CButton isLoading={isPending || isLoginPending} loadingText={isLogin ? "Loggin In" : "Creating account"} type="submit" label={isLogin ? "Login" : "Register"} />
                     </div>
 
                     <div className="mb-4 flex items-center justify-center">
