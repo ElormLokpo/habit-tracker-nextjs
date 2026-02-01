@@ -4,11 +4,30 @@ import { db } from "..";
 import { eq } from "drizzle-orm";
 import { HTTPException } from "hono/http-exception"
 import { STATUS_CODES } from "../../../../packages/types/index"
-import { comparePassword, hashPassword } from "../utils/bcrypt";
+import { comparePassword, generateResetCode, hashPassword, transporter } from "../utils";
 import { generateToken } from "../utils/jwt";
+import { EmailCodeModel } from "../models/password.resets";
 
 
 export const findUserByEmail = async (email: string) => await db.select().from(UserModel).where(eq(UserModel.email, email)).limit(1);
+
+export async function sendResetEmail(email: string, code: string) {
+  await transporter.sendMail({
+    from: `"Support" <${process.env.SMTP_FROM}>`,
+    to: email,
+    subject: "Password Reset Code",
+    html: `
+      <div style="font-family: Arial, sans-serif;">
+        <h2>Password Reset</h2>
+        <p>Use the code below to reset your password:</p>
+        <h1 style="letter-spacing: 4px;">${code}</h1>
+        <p>This code expires in 15 minutes.</p>
+        <p>If you didn’t request this, ignore this email.</p>
+      </div>
+    `,
+  });
+}
+
 
 
 export const registerUserService = async ({ email, password }: IAuthDto) => {
@@ -17,7 +36,6 @@ export const registerUserService = async ({ email, password }: IAuthDto) => {
         throw new HTTPException(STATUS_CODES.CONFLICT, { message: "User already exists." });
     }
 
-    //don't forget to setup email service
 
     const finalauthData = { email, passwordHash: await hashPassword(password) as string };
 
@@ -46,4 +64,19 @@ export const loginUserService = async ({ email, password }: IAuthDto) => {
 
     return await generateToken({ email });
 
+}
+
+export const initialResetPassword = async (email: string) => {
+    const foundUser = await findUserByEmail(email);
+
+    if (foundUser.length == 0) {
+        throw new HTTPException(STATUS_CODES.NOT_FOUND, { message: "User does not exist." });
+
+    }
+
+    const resetCode = generateResetCode();
+    const expiration = 900000
+    await sendResetEmail(email, `${resetCode}`);
+
+    await db.insert(EmailCodeModel).values({email, expiration, code: resetCode});
 }
