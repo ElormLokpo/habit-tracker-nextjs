@@ -1,4 +1,4 @@
-import { registerUserService, loginUserService } from "../services"
+import { registerUserService, loginUserService, initiateResetPasswordService } from "../services"
 import { Context } from "hono"
 
 
@@ -21,4 +21,12 @@ export const loginController = async (c: Context) => {
 
 
     return c.json({ token: authResponse })
+}
+
+export const initiateResetPasswordController = async (c: Context) => {
+    const { email } = await c.req.json();
+
+    await initiateResetPasswordService(email);
+
+    return c.json({ message: "Password otp send to email successfully." })
 }
