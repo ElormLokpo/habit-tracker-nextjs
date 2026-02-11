@@ -37,12 +37,12 @@ export const loginUserService = async ({ email, password }: IAuthDto) => {
     const foundUser = await findUserByEmail(email);
 
     if (foundUser.length == 0) {
-        throw new HTTPException(STATUS_CODES.NOT_FOUND, { message: "User does not exist." });
+        throw new HTTPException(STATUS_CODES.NOT_FOUND, { message: "Incorrect email or password." });
 
     }
 
     if (!await comparePassword(foundUser[0].passwordHash, password)) {
-        throw new HTTPException(STATUS_CODES.UNAUTHORIZED, { message: "Incorrect password." });
+        throw new HTTPException(STATUS_CODES.UNAUTHORIZED, { message: "Incorrect email or password." });
     }
 
     return await generateToken({ email });

@@ -1,11 +1,11 @@
-import * as t from "drizzle-orm/pg-core"
+import {pgTable, varchar, uuid} from "drizzle-orm/pg-core"
 import { timestamps } from "./timestamps"
 
 
-export const UserModel = t.pgTable("users", {
-    id: t.uuid().primaryKey().defaultRandom(),
-    email: t.varchar().unique().notNull(), 
-    passwordHash: t.varchar().notNull(),
+export const UserModel = pgTable("users", {
+    id: uuid().primaryKey().defaultRandom(),
+    email: varchar().unique().notNull(), 
+    passwordHash: varchar().notNull(),
 
     ...timestamps
 })

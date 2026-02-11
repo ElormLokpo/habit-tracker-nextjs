@@ -16,7 +16,7 @@ export const DashboardNav = () => {
     ]
 
     return (
-        <div className="w-[30rem] text-stone-100 bg-stone-900 rounded-2xl p-3 text-sm flex justify-between items-center">
+        <div className="w-[30rem] text-stone-100 bg-stone-900 rounded-2xl py-3 px-5 text-sm flex justify-between items-center">
             <div className="font-bold">
                 TRACKR
             </div>
