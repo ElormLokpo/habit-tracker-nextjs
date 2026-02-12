@@ -1,6 +1,6 @@
-import * as t from "drizzle-orm/pg-core"
+import {timestamp} from "drizzle-orm/pg-core"
 
 
 export const timestamps = {
-    createdAt: t.timestamp().defaultNow()
+    createdAt: timestamp().defaultNow()
 }
