@@ -20,6 +20,9 @@ interface InputProps<T extends FieldValues> extends VariantProps<typeof inputVar
   isDisabled?: boolean
   isLoading?: boolean,
   isError?: boolean
+  handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  min?: string,
+  value?: string
 }
 
 
@@ -27,7 +30,7 @@ const inputVariants = cva(`disabled:cursor-not-allowed`, {
   variants: {
     variant: {
       auth: "w-full border-2 p-3 border-stone-600 text-xs rounded-md",
-      regular: ""
+      regular: "text-xs rounded-md p-2 rounded-md border-stone-200 border-1 w-full"
     }
   },
   defaultVariants: {
@@ -48,20 +51,26 @@ export const CInput = <T extends FieldValues>({
   placeholder,
   isDisabled,
   isLoading,
-  isError
+  isError,
+  handleChange,
+  min,
+  value
 }: InputProps<T>) => {
 
   const inputTypes: Record<string, ReactElement> = {
     text: (
 
       <div>
-        {label && <p className="text-xs">{label}</p>}
+        {label && <p className="text-xs mb-1 text-stone-500">{label}</p>}
         <input
+          min={min}
           disabled={isLoading || isDisabled}
           type={fieldType}
           placeholder={placeholder}
+          value={value}
           className={cn(inputVariants({ variant }), classname, (errors?.name || isError) && "border-red-400")}
           {...(register ? register(name) : {})}
+          onChange={handleChange}
         />
 
         {
