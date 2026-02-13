@@ -4,17 +4,22 @@ import { CInput } from "@/app/components/shared/cinput"
 import { useForm } from "react-hook-form"
 import { IoIosAdd, IoMdTrash } from "react-icons/io";
 import { FaCheck } from "react-icons/fa6";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { routineSchema, routineSchemaType } from "../../../../../../packages/types";
 
 export default function CreateNewRoutinePage() {
-    const { register, formState: { errors }, handleSubmit } = useForm()
-    const [habitsArr, setHabitsArr] = useState([])
+    const { register, formState: { errors }, handleSubmit } = useForm({
+        resolver: zodResolver(routineSchema)
+    })
+    const [habitsArr, setHabitsArr] = useState<string[]>([])
 
     const isPending = false;
 
-    const handleSubmitRoutine = (data: unknown) => {
-        console.log("habits arr", habitsArr)
-        console.log("final data", data)
+    const handleSubmitRoutine = (data: routineSchemaType) => {
+
+        const finalData = { ...data, habits: habitsArr }
+        console.log(finalData)
     }
 
     const today = new Date().toISOString().split("T")[0];
@@ -66,7 +71,7 @@ export default function CreateNewRoutinePage() {
 
 interface IHabitsProps {
     habitsArr: string[],
-    setHabitsArr: (item: unknown) => void
+    setHabitsArr: Dispatch<SetStateAction<string[]>>
 }
 
 const HabitsComponent = ({ habitsArr, setHabitsArr }: IHabitsProps) => {
