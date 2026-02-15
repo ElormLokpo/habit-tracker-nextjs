@@ -6,6 +6,5 @@ export const UserModel = pgTable("users", {
     id: uuid().primaryKey().defaultRandom(),
     email: varchar().unique().notNull(), 
     passwordHash: varchar().notNull(),
-
     ...timestamps
 })
