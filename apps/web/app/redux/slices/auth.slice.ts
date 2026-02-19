@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 interface IAuthInitialState {
-    token: string
+    token: string,
+    userId:string
 }
 
 const initialState: IAuthInitialState = {
-    token: ""
+    token: "",
+    userId:""
 }
 
 
