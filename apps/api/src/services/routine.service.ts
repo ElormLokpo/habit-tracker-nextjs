@@ -22,7 +22,5 @@ export const createRoutineService = async (routineData: CreateRoutineDto) => {
                 throw new HTTPException(500, { message: "Error adding habits" })
             }
         }
-
-
     });
 }   

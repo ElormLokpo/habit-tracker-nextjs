@@ -23,12 +23,13 @@ export const registerUserService = async ({ email, password }: IAuthDto) => {
     const finalauthData = { email, passwordHash: await hashPassword(password) as string };
 
     try {
-        await db.insert(UserModel).values(finalauthData);
+        const [authUser] = await db.insert(UserModel).values(finalauthData).returning();
+        return await generateToken({ email, id: authUser.id });
+
     } catch (e) {
         console.error("Trouble insertintg into database", e)
     }
 
-    return await generateToken({ email });
 
 }
 
@@ -45,7 +46,7 @@ export const loginUserService = async ({ email, password }: IAuthDto) => {
         throw new HTTPException(STATUS_CODES.UNAUTHORIZED, { message: "Incorrect email or password." });
     }
 
-    return await generateToken({ email });
+    return await generateToken({ email, id: foundUser[0].id });
 
 }
 

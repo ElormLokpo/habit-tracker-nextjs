@@ -4,7 +4,7 @@ import * as dotenv from "dotenv"
 // import { drizzle } from 'drizzle-orm/neon-http';
 import { authRoutes, routineRoutes } from './routes';
 import { drizzle } from "drizzle-orm/node-postgres";
-import { Pool } from "pg";
+
 
 dotenv.config();
 
@@ -19,15 +19,7 @@ app.use('/*', cors({
 }))
 
 
-// export const db = drizzle(process.env.DATABASE_URL as string);
-
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
-
-export const db = drizzle(pool);
-
+export const db = drizzle(process.env.DATABASE_URL as string);
 
 
 app.route("/auth", authRoutes);

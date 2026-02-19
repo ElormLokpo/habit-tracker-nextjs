@@ -4,7 +4,10 @@
 
 export const BACKEND_URLS = {
     REGISTER: "/auth/register",
-    LOGIN: "/auth/login"
+    LOGIN: "/auth/login",
+    ROUTINE: {
+        CREATE: "/routine/create-routine"
+    }
 }
 
 export const URLS = {

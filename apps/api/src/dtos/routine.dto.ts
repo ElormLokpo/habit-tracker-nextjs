@@ -1,5 +1,3 @@
-import { routineSchemaType } from "../../../../packages/types";
-
 
 export interface CreateRoutineDto {
     routineName:string,
