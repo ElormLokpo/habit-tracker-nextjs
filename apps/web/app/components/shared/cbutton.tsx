@@ -1,6 +1,5 @@
 import { cn } from "@/app/lib/utils"
 import { cva, type VariantProps } from "class-variance-authority"
-import { handler } from "next/dist/build/templates/app-page"
 import { ReactElement } from "react"
 
 interface IButtonProps extends VariantProps<typeof buttonVariants> {

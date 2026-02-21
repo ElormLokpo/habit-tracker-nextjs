@@ -1,13 +1,24 @@
+"use client"
+import { useGetAuthUser } from "@/app/hooks/authHook";
 import { DashboardNav } from "./(components)/nav";
+import { emailTrim } from "@/app/lib/utils";
 
 
 
 export default function DashboardPage() {
 
+    const { email: userEmail } = useGetAuthUser();
+
     return (
         <div>
             <div className="flex items-center justify-center mb-15">
                 <DashboardNav />
+            </div>
+
+
+            <div className="mb-4 text-sm">
+                <div className="text-xs">Hello, <span className="font-semibold">{emailTrim(userEmail)}</span></div>
+                <div className="text-stone-600">Your daily habits are synced and ready.</div>
             </div>
 
 
@@ -22,10 +33,10 @@ export default function DashboardPage() {
 
             <div className="grid grid-cols-2 gap-2 mb-5">
                 <div className="h-[20rem] bg-white rounded-lg">
-                   
+
                 </div>
                 <div className="bg-white rounded-lg">
-                    b
+                    <div>Habits</div>
                 </div>
             </div>
         </div>

@@ -18,7 +18,7 @@ export const AuthSlice = createSlice({
         storeToken: (state, action) => {
             state.token = action.payload
         },
-        clearToken: (state, _action) => {
+        clearToken: (state) => {
             state.token = ""
         }
     }
