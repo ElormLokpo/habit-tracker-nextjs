@@ -1,25 +1,29 @@
 "use client"
 
 import { authSchema, authSchemaType } from "../../../../../../packages/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CInput } from "@/app/components/shared/cinput";
 import { CButton } from "@/app/components/shared/cbutton";
 import { useLogin, useRegister } from "@/app/hooks/authHook";
+import { useSearchParams } from "next/navigation";
 
 const AuthPage = () => {
+    const searchParams = useSearchParams().get("mode")
     const [isLogin, setIsLogin] = useState(true);
-    const { handleSubmit, register, formState: { errors } } = useForm<authSchemaType>({
+    const { handleSubmit, register, formState: { errors }, reset } = useForm<authSchemaType>({
         resolver: zodResolver(authSchema)
     })
-
 
     const { mutate: registerUser, isPending, isError, error } = useRegister()
     const { mutate: loginUser, isPending: isLoginPending, isError: isLoginError, error: loginError } = useLogin()
 
 
-    console.log('ERRROR', loginError)
+
+    useEffect(() => {
+        setIsLogin(searchParams !== "register")
+    }, [searchParams])
 
     const submitHandler = (data: authSchemaType) => {
         if (isLogin) {
@@ -64,6 +68,7 @@ const AuthPage = () => {
                     <div className="mb-4 flex items-center justify-center">
                         <button type="button" onClick={
                             () => {
+                                reset()
                                 setIsLogin(!isLogin)
                             }
                         } className="text-xs text-center hover:cursor-pointer">

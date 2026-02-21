@@ -39,8 +39,8 @@ export default function CreateNewRoutinePage() {
                     <div className="text-sm text-stone-700">{`>`} Enter routine details below</div>
                 </div>
                 <form onSubmit={handleSubmit(handleSubmitRoutine)}>
-                    <div className="bg-white rounded-lg p-2 w-[35rem] mb-4">
-                        <div className="grid grid-cols-4 gap-3">
+                    <div className="bg-white rounded-lg p-2 lg:w-[35rem] mb-4">
+                        <div className="xl:grid xl:grid-cols-4 gap-3">
                             <div className="mb-1.5 col-span-2">
                                 <CInput isDisabled={isPending} label="Routine Name:" placeholder="Enter routine name" inputType="text" name="routineName" register={register} errors={errors} />
                             </div>
@@ -106,7 +106,7 @@ const HabitsComponent = ({ habitsArr, setHabitsArr, isPending }: IHabitsProps) =
                 <p className="font-semibold">Add Habbits</p>
             </div>
 
-            <div className="bg-white rounded-lg mb-4 p-2 w-[35rem]">
+            <div className="bg-white rounded-lg mb-4 p-2 xl:w-[35rem]">
                 <div className="">
                     <div className="grid grid-cols-12 gap-1 items-center mb-5">
                         <div className="mb-1.5 col-span-11">
